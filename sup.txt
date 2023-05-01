@@ -1,0 +1,3 @@
+Git initial commit
+git remote add origin https://github.com/Mishakaveli1994/JS_BackEnd.git
+git push --set-upstream origin master
