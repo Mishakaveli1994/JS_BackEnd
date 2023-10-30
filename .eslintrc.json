@@ -1,0 +1,20 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "standard",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module",
+        "ecmaFeatures": { "jsx": true }
+    },
+    "rules": {
+        "semi": "error",
+        "curly": "error",
+        "quotes": ["warn", "single"],
+        "no-undef": "error"
+      }
+      // prettier semi - remove semicolons when formatting
+}
