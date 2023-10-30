@@ -1,0 +1,47 @@
+// Install ESLint - npm init -y / npx eslint --init
+
+{
+  "files.autoSave": "afterDelay",
+  "liveServer.settings.donotShowInfoMsg": true,
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [],
+    "compounds": []
+  },
+  "[python]": {
+    "editor.wordBasedSuggestions": false,
+    "editor.formatOnType": true
+  },
+  "tabnine.experimentalAutoImports": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "explorer.confirmDelete": false,
+  "prettier.singleQuote": true,
+  "grunt.autoDetect": "on",
+  "jake.autoDetect": "on",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "liveServer.settings.donotVerifyTags": true,
+  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "liveServer.settings.file": "index.html",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.editor.wrapTabs": true,
+  "[css]": {
+    "editor.defaultFormatter": "aeschli.vscode-css-formatter"
+  },
+  "workbench.editor.enablePreview": false,
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "files.associations": {
+    "*.js": "javascript"
+  },
+  "javascript.validate.enable": false,
+  "js/ts.implicitProjectConfig.checkJs": true,
+  "prettier.semi": false,
+}
