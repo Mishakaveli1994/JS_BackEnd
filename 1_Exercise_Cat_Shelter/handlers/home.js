@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const cats = require('../data/cats.json')
 
 const baseURL = 'http://localhost:3000'
 module.exports = (req, res) => {
@@ -9,6 +8,13 @@ module.exports = (req, res) => {
 
   if (pathname === '/' && req.method === 'GET') {
     const filePath = path.normalize(path.join(__dirname, '../views/home/index.html'))
+
+    let cats = {}
+    fs.readFile('./data/cats.json', 'utf8', (err, data) => {
+      if (err) throw err
+
+      cats = JSON.parse(data)
+    })
 
     fs.readFile(filePath, (err, data) => {
       if (err) {
@@ -31,7 +37,8 @@ module.exports = (req, res) => {
           <li class="btn delete"><a href="/cats-find-new-home/${cat.id}">New Home</a></li>
         </ul>
       </li>
-      `)
+      `
+      )
       const modifiedData = data.toString().replace('{{cats}}', modifiedCats)
       res.write(modifiedData)
       res.end()

@@ -7,6 +7,8 @@ function getContentType(url) {
     return 'image/png'
   } else if (url.endsWith('.jpg')) {
     return 'image/jpg'
+  } else if (url.endsWith('.JPG')) {
+    return 'image/jpg'
   } else if (url.endsWith('.jpeg')) {
     return 'image/jpg'
   } else if (url.endsWith('.js')) {
@@ -52,7 +54,7 @@ module.exports = (req, res) => {
           return
         }
 
-        console.log(pathname)
+        // console.log(pathname)
         res.writeHead(200, { 'Content-Type': getContentType(pathname) })
         res.write(data)
         res.end()
