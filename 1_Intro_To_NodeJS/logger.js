@@ -1,6 +1,6 @@
 console.log('Coming from logger.js')
 
-function log(input) {
+function log (input) {
   console.log(`>>> ${input} <<<`)
 }
 
