@@ -9,7 +9,7 @@ module.exports = (req, res) => {
   if (pathname === '/' && req.method === 'GET') {
     const filePath = path.normalize(path.join(__dirname, '../views/home/index.html'))
 
-    let cats = {}
+    let cats = []
     fs.readFile('./data/cats.json', 'utf8', (err, data) => {
       if (err) throw err
 
@@ -24,7 +24,6 @@ module.exports = (req, res) => {
         res.end()
         return
       }
-
       res.writeHead(200, { 'Content-Type': 'text/html' })
       const modifiedCats = cats.map(
         (cat) => `<li>
