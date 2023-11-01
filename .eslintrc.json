@@ -14,7 +14,8 @@
         "semi": "error",
         "curly": "error",
         "quotes": ["warn", "single"],
-        "no-undef": "error"
+        "no-undef": "error",
+        "space-before-function-paren": 0
       }
       // prettier semi - remove semicolons when formatting
 }

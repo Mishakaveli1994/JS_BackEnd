@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-function getContentType(url) {
+function getContentType (url) {
   if (url.endsWith('.css')) {
     return 'text/css'
   } else if (url.endsWith('.png')) {
