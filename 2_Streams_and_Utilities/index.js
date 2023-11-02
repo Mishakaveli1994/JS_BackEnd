@@ -16,12 +16,36 @@ eventEmitter.on('cats', (name) => {
 
 function requestHandler(req, res) {
   const reqUrl = url.parse(req.url)
-
   const queryParams = querystring.parse(reqUrl.query)
+  const readStream = fs.createReadStream('./views/cats.html', { highWaterMark: 5, encoding: 'utf-8' }) // * Stream throttles intentionally
+  // const readStream = fs.createReadStream('./views/cats.html', { encoding: 'utf-8' })
+  // req.on('data', (data) => {
+  //   console.log(data)
+  // })
+
+  readStream.pipe(res)
 
   switch (reqUrl.pathname) {
     case '/cats':
       res.writeHead(200, { 'Content-Type': 'text/html' })
+
+      // fs.readFile('./views/cats.html', function (error, data) {
+      //   if (error) {
+      //     console.log('kek Heheh')
+      //     return
+      //   }
+      //   res.write(data)
+      //   // console.log(data);
+      //   res.end()
+      // })
+
+      // readStream.on('data', (chunk) => {
+      //   res.write(chunk)
+      // })
+
+      // readStream.on('end', () => {
+      //   res.end()
+      // })
 
       pubSub.publish('cats', queryParams.name)
       eventEmitter.emit('cats', queryParams.name)
