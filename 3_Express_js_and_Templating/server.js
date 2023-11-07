@@ -1,13 +1,24 @@
-const express = require('express')
+const express = require('express');
 
-const app = express()
+const app = express();
 
-const port = 5000
+const port = 5000;
 
 app.get('/', (req, res) => {
-  console.log('Root path accessed - console print')
+  res.send('Hello World!');
+});
 
-  res.send('Hello World!')
-})
+app.post('/cats', (req, res) => {
+  res.status(201).send('Cat created');
+});
 
-app.listen(port, () => console.log(`The server is listening on port ${port}`))
+app.put('/cats/id', (req, res) => {
+  console.log(`Update cat`);
+});
+
+app.all('/', (req, res) => {
+  console.log('Handle all requests');
+  res.end();
+});
+
+app.listen(port, () => console.log(`The server is listening on port ${port}`));
