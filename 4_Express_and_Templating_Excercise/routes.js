@@ -2,7 +2,7 @@
 const { Router } = require('express');
 
 const productController = require('./controllers/productController');
-const aboutController = require('./controllers/aboutController');
+const aboutController = require('./controllers/homeController');
 
 // ? Variant to export 2
 // const Router = require('express').Router;
@@ -13,8 +13,8 @@ const aboutController = require('./controllers/aboutController');
 
 const router = Router();
 
-router.use('/', productController);
-router.use('/about', aboutController);
+router.use('/products', productController);
+router.use('/', aboutController);
 router.get('*', (req, res) => {
   res.render('404', { layout: 'main', title: 'Page Not Found' });
 });

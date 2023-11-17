@@ -9,6 +9,10 @@ const router = Router();
 // router.get('/', index);
 
 router.get('/', (req, res) => {
+  res.redirect('/products');
+});
+
+router.get('/about', (req, res) => {
   res.render('about', { layout: 'main', title: 'About' });
 });
 

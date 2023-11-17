@@ -15,6 +15,10 @@ img {
     width: auto;
 }
 
+.img_a {
+    margin: 0px;
+}
+
 img.cube {
     display: block;
     margin: 0 auto;
@@ -220,12 +224,12 @@ span.error {
     display: block;
 }
 
-img#sadFaceImg{
+img#sadFaceImg {
     display: block;
     margin: 0 auto;
 }
 
-h2{
+h2 {
     text-align: center;
 }
 
