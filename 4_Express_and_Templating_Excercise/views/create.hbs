@@ -1,7 +1,14 @@
 <main>
-  <h1>Create</h1>
+  <h1>{{title}}</h1>
   <div class='form'>
-    <form action='' method=''>
+    <div id="errors">
+      <ul class="errorUl">
+        {{#each errors}}
+          {{>createError}}
+        {{/each}}
+      </ul>
+    </div>
+    <form action='/products/create' method='POST'>
       <label for='name'>Name</label>
       <input type='text' id='name' name='name' />
       <label for='name'>Description</label>
