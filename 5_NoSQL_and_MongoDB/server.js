@@ -22,23 +22,8 @@ app.engine('hbs', handlebars.engine({ defaultLayout: 'main', extname: 'hbs' }));
 app.set('view engine', 'hbs');
 
 app.get('/', (req, res) => {
-  // res.sendFile('./views/home.html', { root: __dirname });
-  // res.send('Index page');
-  const name = 'Misho';
-  const stefanAngry = ['calm', 'mad', 'angry', 'clucking'];
-  const idx = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
-  const anger = stefanAngry[idx];
-  res.render('home', { name, anger });
-});
-
-app.get('/betty', (req, res) => {
-  // res.sendFile('./views/home.html', { root: __dirname });
-  // res.send('Index page');
-  const name = 'Мишо';
-  const bettyLove = ['много', 'малко', 'адски много', 'бдоооогооо'];
-  const idx = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
-  const love = bettyLove[idx];
-  res.render('betty', { name, love });
+  res.sendFile('./views/home.html', { root: __dirname });
+  res.send('Index page');
 });
 
 app.get('/download', (req, res) => {
