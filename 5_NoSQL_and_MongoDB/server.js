@@ -1,9 +1,13 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
-const checkCatIdMiddleware = require('./middlewares/middleware.js');
-const middlewareLogger = require('./middlewares/logger.js');
+const checkCatIdMiddleware = require('./middlewares/middleware');
+const middlewareLogger = require('./middlewares/logger');
 const cats = require('./cats.js');
+const createCat = require('./services/createCat');
+const { faker } = require('@faker-js/faker');
+const Cat = require('./models/Cat');
+require('./config/db');
 // const path = require('path');
 
 const app = express();
@@ -22,39 +26,14 @@ app.engine('hbs', handlebars.engine({ defaultLayout: 'main', extname: 'hbs' }));
 app.set('view engine', 'hbs');
 
 app.get('/', (req, res) => {
-  res.sendFile('./views/home.html', { root: __dirname });
-  res.send('Index page');
+  Cat.find({ name: 'Elta' })
+    .populate('owner')
+    .then((cat) => console.log(cat));
+  // ? Population Example
+  // createCat(faker.person.firstName(), 'Persian', faker.person.firstName());
+  // res.sendFile('./views/home.html', { root: __dirname });
+  // res.send('Index page');
 });
-
-app.get('/download', (req, res) => {
-  res.download('./views/home.html');
-});
-
-app.get('/attachment', (req, res) => {
-  res.attachment('./views/home.html');
-  res.send('The file has been sent'); // The difference between download is that I have to end the response myself.
-});
-app.get('/json', (req, res) => {
-  res.json(['Navcho', 'Clutchi', 'Mishi', 'Rasho']);
-});
-
-app.get('/redirect', (req, res) => {
-  res.redirect('/');
-});
-
-// app.get('/sendFile', (req, res) => {
-//   // res.sendFile(path.join(__dirname, '/views/home.html'));
-//   res.sendFile('./views/home.html', { root: __dirname });
-// });
-
-// app
-//   .get('/cats', (req, res) => {
-//     res.send('Cute cats!');
-//   })
-//   .post('/cats', (req, res) => {
-//     console.log('Created cat');
-//     res.status(201).send('Cat created');
-//   });
 
 app.get('/cats', (req, res) => {
   res.render('cats', { cats: cats.getAll() });
