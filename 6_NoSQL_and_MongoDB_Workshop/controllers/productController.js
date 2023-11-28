@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 const productService = require('../services/productService');
+const accessoryService = require('../services/accessoryService');
 const validateProduct = require('../middlewares/createValidation');
 
 router.get('/', (req, res) => {
@@ -24,13 +25,22 @@ router.post('/create', validateProduct, (req, res) => {
     .catch(() => res.status(500).end());
 });
 
-router.get('/details/:id([A-Za-z0-9]+)', (req, res) => {
+router.get('/details/:id([A-Za-z0-9]+)', async (req, res) => {
+  const product = await productService.getByIdwithAccessories(req.params.id);
+  res.render('details', { layout: 'main', title: 'Product details', product });
+});
+
+router.get('/:productId([A-Za-z0-9]+)/attach', async (req, res) => {
+  const product = await productService.getById(req.params.productId);
+  const accessories = await accessoryService.getAllBesides(product.accessories);
+
+  res.render('attachAccessory', { layout: 'main', title: 'Attach Accessory Page', product, accessories });
+});
+
+router.post('/:productId([A-Za-z0-9]+)/attach', (req, res) => {
   productService
-    .getById(req.params.id)
-    .then((cube) => {
-      res.render('details', { layout: 'main', title: 'Product details', ...cube });
-    })
-    .catch(() => res.status(500).end());
+    .attachAccessory(req.params.productId, req.body.accessory)
+    .then(() => res.redirect(`/products/details/${req.params.productId}`));
 });
 
 module.exports = router;
