@@ -42,18 +42,15 @@ app.use(
 //   res.send('You have been logged in!');
 // });
 
-app.get('/login/:username/:password', (req, res) => {
+app.get('/register/:username/:password', (req, res) => {
   const plainTextPassword = req.params.password;
   req.session.username = req.params.username;
-  bcrypt.genSalt(9, function (err, salt) {
+  bcrypt.hash(plainTextPassword, 9, function (err, hash) {
     if (err) throw err;
-    bcrypt.hash(plainTextPassword, salt, function (err, hash) {
-      if (err) throw err;
-      console.log(hash);
-      // req.session.password = <PASSWORD>;
-      // res.send('You have been logged in!');
-    });
-    console.log(salt);
+    req.session.hash = hash;
+    req.session.save();
+    // req.session.password = <PASSWORD>;
+    // res.send('You have been logged in!');
   });
 
   res.send('You have been logged in!');
@@ -66,6 +63,15 @@ app.get('/', (req, res) => {
 
 app.get('/session', (req, res) => {
   res.send(req.sessionData);
+});
+
+app.get('/login/:password', (req, res) => {
+  console.log(req.params.password);
+  console.log(req.session.hash);
+  bcrypt.compare(req.params.password, req.session.hash, function (err, isMatch) {
+    if (err) throw err;
+    res.send(isMatch ? 'You have been logged in!' : 'Incorrect password!');
+  });
 });
 
 app.listen(5005, function () {
