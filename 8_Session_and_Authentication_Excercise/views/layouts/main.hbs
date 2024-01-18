@@ -1,23 +1,30 @@
-<html lang='en'>
+<html lang="en">
 
 <head>
-  <meta charset='UTF-8' />
+  <meta charset="UTF-8" />
   <title>{{title}}</title>
-  <link href='/css/site.css' type='text/css' rel='stylesheet' />
-  <link rel='shortcut icon' type='image/x-icon' href='/images/favicon.png' />
+  <link href="/css/site.css" type="text/css" rel="stylesheet" />
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.png" />
 </head>
 
 <body>
-  <div class='container'>
+  <div class="container">
     <header>
       <ul>
-        <li><a href="/" class="img_a"><img class='logo' src='/images/logo.png' /></a></li>
-        <li><a href='/'>Browse</a></li>
-        <li><a href='/products/create'>Add a Cube</a></li>
-        <li><a href='/accessories/create'>Add an Accessory</a></li>
-        <li><a href='/about'>About</a></li>
-        <li><a href='/auth/login'>Login</a></li>
-        <li><a href='/auth/register'>Register</a></li>
+        <li><a href="/" class="img_a"><img class="logo" src="/images/logo.png" /></a></li>
+        <li><a href="/">Browse</a></li>
+        {{#if isAuthenticated}}
+          <li><a href="/products/create">Add a Cube</a></li>
+          <li><a href="/accessories/create">Add an Accessory</a></li>
+        {{/if}}
+        <li><a href="/about">About</a></li>
+        {{#unless isAuthenticated}}
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        {{/unless}}
+        {{#if isAuthenticated}}
+          <li><a href="/auth/logout">Logout</a></li>
+        {{/if}}
       </ul>
     </header>
     {{{body}}}

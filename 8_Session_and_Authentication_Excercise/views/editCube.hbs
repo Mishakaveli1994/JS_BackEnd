@@ -1,20 +1,13 @@
 <main>
-  <h1>{{title}}</h1>
+  <h1>Edit Cube</h1>
   <div class="form">
-    <div id="errors">
-      <ul class="errorUl">
-        {{#each errors}}
-          {{>createError}}
-        {{/each}}
-      </ul>
-    </div>
-    <form action="/products/create" method="POST">
+    <form action="/products" method="POST">
       <label for="name">Name</label>
-      <input type="text" id="name" name="name" />
+      <input type="text" id="name" name="name" value="">
       <label for="name">Description</label>
       <textarea id="name" name="description"></textarea>
       <label for="image">ImageUrl</label>
-      <input type="text" id="image" name="imageUrl" />
+      <input type="text" id="image" name="imageUrl" value="">
       <label for="difficulty">Difficulty</label>
       <select id="difficulty" name="difficultyLevel">
         <option value="1">1 - Very Easy</option>
@@ -24,7 +17,7 @@
         <option value="5">5 - Expert</option>
         <option value="6">6 - Hardcore</option>
       </select>
-      <input type="submit" value="Create" />
+      <input type="submit" value="Edit">
     </form>
   </div>
 </main>
