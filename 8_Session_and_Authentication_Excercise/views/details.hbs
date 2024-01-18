@@ -6,9 +6,11 @@
     <p><span>Difficulty level:</span> {{product.difficultyLevel}}</p>
     <a class="btn" href="/products">Back</a>
     {{#if isAuthenticated}}
-      <a class="btn" href="/products/{{product._id}}/attach">Attach</a>
-      <a class="btn" href="/products/{{product._id}}/edit">Edit</a>
-      <a class="btn" href="/products/{{product._id}}/delete">Delete</a>
+      {{#eq userId product.creator}}
+        <a class="btn" href="/products/{{product._id}}/attach">Attach</a>
+        <a class="btn" href="/products/{{product._id}}/edit">Edit</a>
+        <a class="btn" href="/products/{{product._id}}/delete">Delete</a>
+      {{/eq}}
     {{/if}}
   </div>
   <h2>Accessories</h2>

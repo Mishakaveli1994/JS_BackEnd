@@ -22,13 +22,19 @@ async function getById(id) {
   return await Cube.findById(id).lean();
 }
 
+async function deleteById(id) {
+  return await Cube.deleteOne({ _id: id });
+}
+
+async function updateById(id, data) {
+  return await Cube.updateOne({ _id: id }, data);
+}
 async function getByIdwithAccessories(id) {
   return await Cube.findById(id).populate('accessories').lean();
 }
 
-function createProduct(data) {
-  const cube = new Cube(data);
-
+function createProduct(data, userId) {
+  const cube = new Cube({ ...data, creator: userId });
   return cube.save();
 }
 
@@ -39,4 +45,4 @@ async function attachAccessory(productId, accessoryId) {
   return product.save();
 }
 
-module.exports = { create: createProduct, getAll, getById, attachAccessory, getByIdwithAccessories };
+module.exports = { create: createProduct, getAll, getById, attachAccessory, getByIdwithAccessories, updateById, deleteById };

@@ -8,7 +8,8 @@ function setupExpress(app) {
     'hbs',
     handlebars.engine({
       defaultLayout: false,
-      extname: 'hbs'
+      extname: 'hbs',
+      helpers: require('../helpers/handlebarsHelpers')
     })
   );
 
