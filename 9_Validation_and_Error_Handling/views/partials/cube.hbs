@@ -1,0 +1,11 @@
+<div class='cube'>
+  <img class='cube' src='{{imageUrl}}' />
+  <p class='name'>{{name}}</p>
+  <p><span>Difficulty level:</span> {{difficultyLevel}}</p>
+  <a class='btn' href='/products/details/{{_id}}'>Details</a>
+  {{#if isAuthenticated}}
+    {{#eq userId creator}}
+      <a class='btn' href='/products/{{_id}}/attach'>Attach</a>
+    {{/eq}}
+  {{/if}}
+</div>
