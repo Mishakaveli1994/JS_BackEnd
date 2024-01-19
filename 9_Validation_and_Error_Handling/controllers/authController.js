@@ -32,7 +32,7 @@ router.get('/login', isGuest, (req, res) => {
   res.render('login', { layout: 'main', title: 'Login' });
 });
 
-router.post('/login', isGuest, async (req, res) => { 
+router.post('/login', isGuest, async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -48,11 +48,12 @@ router.get('/register', isGuest, (req, res) => {
   res.render('register', { layout: 'main', title: 'Register' });
 });
 
-//router.post('/register', isGuest, isStrongPasswordMiddleware, async (req, res) => {
+// router.post('/register', isGuest, isStrongPasswordMiddleware, async (req, res) => {
 
 router.post(
   '/register',
   isGuest,
+  body('email', 'Please provide a valid email!').isEmail().normalizeEmail(),
   body('username', 'Please provide a username!').notEmpty(),
   body('password', 'Password is too short!').isLength({ min: 5 }),
   async (req, res) => {
@@ -68,6 +69,7 @@ router.post(
     }
 
     const errors = validationResult(req).errors;
+    // console.log(req.body.email);
 
     if (errors.length > 0) {
       res.render('register', { layout: 'main', title: 'Register', errors });
@@ -77,9 +79,9 @@ router.post(
     try {
       const user = await authService.register({ username, password });
 
-      res.redirect('/login');
-    } catch (error) {
-      res.render('register', { layout: 'main', title: 'Register', error });
+      res.redirect('/auth/login');
+    } catch (errors) {
+      res.render('register', { layout: 'main', title: 'Register', errors: [errors] });
     }
   }
 );

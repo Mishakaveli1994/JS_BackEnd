@@ -3,19 +3,15 @@ const bcrypt = require('bcrypt');
 const config = require('../config/index.js');
 const jwt = require('jsonwebtoken');
 
-const register = async ({ username, password }) => {
-  await User.exists({ username }).then((result) => {
+const register = ({ username, password }) =>
+  User.exists({ username }).then((result) => {
     if (result) {
-      throw new Error('Username already exists !');
+      throw { msg: 'Username already exists !' };
+    } else {
+      const user = new User({ username, password });
+      return user.save();
     }
   });
-
-  const salt = await bcrypt.genSalt(config.SALT_ROUNDS);
-  const hash = await bcrypt.hash(password, salt);
-
-  const user = new User({ username, password: hash });
-  return await user.save();
-};
 
 const login = async ({ username, password }) => {
   const user = await User.findOne({ username });
