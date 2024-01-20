@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const register = ({ username, password }) =>
   User.exists({ username }).then((result) => {
     if (result) {
-      throw { msg: 'Username already exists !' };
+      throw { message: 'Username already exists !' };
     } else {
       const user = new User({ username, password });
       return user.save();

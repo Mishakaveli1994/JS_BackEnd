@@ -2,15 +2,36 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const config = require('../config/index.js');
 
+const ENGLISH_ALHANUMERIC_PATTERN = /^[a-zA-Z0-9]+$/;
+
 const userSchema = new mongoose.Schema({
   id: mongoose.Types.ObjectId,
   username: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
+    minlength: 5,
+    validate: {
+      validator: (value) => {
+        return ENGLISH_ALHANUMERIC_PATTERN.test(value);
+      },
+      message: (props) => {
+        return `${props.value} should only contain latin characters and numbers.`;
+      }
+    }
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    minlength: 8,
+    validate: {
+      validator: (value) => {
+        return ENGLISH_ALHANUMERIC_PATTERN.test(value);
+      },
+      message: (props) => {
+        return 'Password only contain latin characters and numbers.';
+      }
+    }
   }
 });
 

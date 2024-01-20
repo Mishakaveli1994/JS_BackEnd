@@ -53,9 +53,9 @@ router.get('/register', isGuest, (req, res) => {
 router.post(
   '/register',
   isGuest,
-  body('email', 'Please provide a valid email!').isEmail().normalizeEmail(),
-  body('username', 'Please provide a username!').notEmpty(),
-  body('password', 'Password is too short!').isLength({ min: 5 }),
+  // body('email', 'Please provide a valid email!').isEmail().normalizeEmail(),
+  // body('username', 'Please provide a username!').notEmpty(),
+  // body('password', 'Password is too short!').isLength({ min: 5 }),
   async (req, res) => {
     const { username, password, repeatPassword } = req.body;
 
@@ -68,20 +68,23 @@ router.post(
       });
     }
 
-    const errors = validationResult(req).errors;
-    // console.log(req.body.email);
+    // const errors = validationResult(req).errors;
 
-    if (errors.length > 0) {
-      res.render('register', { layout: 'main', title: 'Register', errors });
-      return;
-    }
+    // if (errors.length > 0) {
+    //   for (const i of errors) {
+    //     delete Object.assign(i, { message: i.msg }).msg;
+    //   }
+    //   res.render('register', { layout: 'main', title: 'Register', errors });
+    //   return;
+    // }
 
     try {
       const user = await authService.register({ username, password });
 
       res.redirect('/auth/login');
-    } catch (errors) {
-      res.render('register', { layout: 'main', title: 'Register', errors: [errors] });
+    } catch (err) {
+      const error = Object.keys(err.errors).map((key) => ({ message: err.errors[key].message }))[0];
+      res.render('register', { layout: 'main', title: 'Register', error });
     }
   }
 );
