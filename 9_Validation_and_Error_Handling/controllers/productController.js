@@ -18,12 +18,13 @@ router.get('/create', isAuthenticated, (req, res) => {
   res.render('create', { layout: 'main', title: 'Create Cube Page' });
 });
 
-router.post('/create', isAuthenticated, validateProduct, (req, res) => {
+// router.post('/create', isAuthenticated, validateProduct, (req, res) => {
+router.post('/create', isAuthenticated, (req, res, next) => {
   // ? Done with promise
   productService
     .create(req.body, req.user.id)
     .then(() => res.redirect('/products/'))
-    .catch(() => res.status(500).end());
+    .catch(next);
 });
 
 router.get('/details/:id([A-Za-z0-9]+)', async (req, res) => {
