@@ -1,6 +1,6 @@
 const errorHandler = (err, req, res, next) => {
-  // console.log('Error message:');
-  // console.log(err);
+  console.log('Error message:');
+  console.log(err);
   let errors = [];
   if (err.errors) {
     errors = Object.values(err.errors).map((i) => i.message);
