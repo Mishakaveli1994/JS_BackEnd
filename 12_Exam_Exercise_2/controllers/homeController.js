@@ -5,23 +5,19 @@ router.get('/', (req, res, next) => {
   // TODO: Only display public courses
   // TODO: Create un-enroll from course
   // TODO: Show enrolled users to creator (number or names ?)
+  let getFunc = {};
+  const searchQuery = req.query.search;
   if (req.user) {
-    courseService
-      .getAll()
-      .then((courses) => {
-        courses = courses.map((course) => ({ ...course, createdAt: course.createdAt.toLocaleDateString() }));
-        res.render('home/home', { courses });
-      })
-      .catch(next);
+    getFunc = courseService.getAll.bind(courseService.getAll, searchQuery);
   } else {
-    courseService
-      .getMostPopular(3)
-      .then((courses) => {
-        courses = courses.map((course) => ({ ...course, createdAt: course.createdAt.toLocaleDateString() }));
-        res.render('home/home', { courses });
-      })
-      .catch(next);
+    getFunc = courseService.getMostPopular.bind(courseService.getMostPopular, 3);
   }
+  getFunc()
+    .then((courses) => {
+      courses = courses.map((course) => ({ ...course, createdAt: course.createdAt.toLocaleDateString() }));
+      res.render('home/home', { courses });
+    })
+    .catch(next);
 });
 
 module.exports = router;

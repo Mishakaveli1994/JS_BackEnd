@@ -39,8 +39,14 @@
             </ul>
         </nav>
         {{#if error}}
-            <section class="notifications">
+            <section class="notifications-error">
                 <p class="notification-message">{{error.message}}</p>
+            </section>
+        {{/if}}
+
+        {{#if success}}
+            <section class="notifications-success">
+                <p class="notification-message">{{success.message}}</p>
             </section>
         {{/if}}
 

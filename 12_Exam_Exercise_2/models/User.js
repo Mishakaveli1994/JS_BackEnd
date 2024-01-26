@@ -5,12 +5,16 @@ const { SECRET, SALT_ROUNDS } = require('../config/config');
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
+    minlength: [5, 'Username must be at least 5 characters long'],
+    validate: [/^[a-zA-Z0-9_!./\\]+$/, 'Username must contain only letters, numbers and underscores'],
     required: true,
     unique: true
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    minlength: [10, 'Password must be at least 5 characters long'],
+    validate: [/^[$a-zA-Z0-9_!./\\]+$/, 'Password must contain only letters, numbers, ., /, \\']
   },
   enrolledCourses: [
     {

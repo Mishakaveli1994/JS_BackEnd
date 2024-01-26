@@ -47,13 +47,13 @@ router.post(
       return res.render('users/register', { error });
     }
     const { username, password } = req.body;
-    // TODO: Check if they are secure
-    // TODO: Display errors if any
     // TODO: Display success message and status if okay
+    // TODO: Implement checks on the models min, max, allowed characters, etc.
     authService
       .register(username, password)
       .then((createdUser) => {
-        res.redirect('/auth/login');
+        const success = { message: 'User created successfully!' };
+        return res.render('users/register', { success });
       })
       .catch(next);
   }

@@ -9,7 +9,7 @@ const courseSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    maxlength: [50, 'Description must be less than 50 characters']
+    maxlength: [500, 'Description must be less than 50 characters']
   },
   imageUrl: {
     type: String,

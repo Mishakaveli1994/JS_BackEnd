@@ -1,32 +1,33 @@
 const router = require('express').Router();
 const courseService = require('../services/courseService');
 
+// TODO: For create and course access user needs to be authenticated otherwise 404
+// TODO: When displaying messages/ show them on current page and DO NOT REDIRECT / add to locals maybe ?
+// TODO: On forms show error below each field 
+// TODO: Return multiple errors
+// TODO: Create search - with get and querystring
+// TODO: If you have time, implement AJAX 
+
 router.get('/create', (req, res) => {
-  res.render('courses/create-course');
+  res.render('courses/create');
 });
 
 router.post('/create', (req, res, next) => {
-  const { title, description, imageUrl, isPublic } = req.body;
-
-  const courseData = {
-    title,
-    description,
-    imageUrl,
-    isPublic: Boolean(isPublic) // Also works -> !!isPublic
-  };
+  const courseData = extractCourseData(req);
   courseService
     .create(courseData, req.user._id)
     .then((createdCourse) => {
-      res.redirect('/');
+      const success = { message: 'Course created successfully!' };
+      return res.render('home/home', { success });
     })
     .catch(next);
 });
 
-router.get('/:id([A-Za-z0-9]+)/details', (req, res, next) => {
-  const { id } = req.params;
+router.get('/:courseId([A-Za-z0-9]+)/details', (req, res, next) => {
+  const { courseId } = req.params;
   const userId = req.user._id;
   courseService
-    .getCourseById(id)
+    .getCourseById(courseId)
     .lean()
     // course.isEnrolled = course.usersEnrolled.some(x=> x._id === userId);
     .then((course) => {
@@ -35,7 +36,7 @@ router.get('/:id([A-Za-z0-9]+)/details', (req, res, next) => {
       return course;
     })
     .then((course) => {
-      res.render('courses/course-details', { course });
+      res.render('courses/details', { course });
     })
     .catch(next);
 });
@@ -67,23 +68,50 @@ router.get('/:courseId([A-Za-z0-9]+)/delete', (req, res, next) => {
 });
 
 router.get('/:courseId([A-Za-z0-9]+)/edit', (req, res, next) => {
-  const { id } = req.params;
+  const { courseId } = req.params;
   const userId = req.user._id;
-  courseService
-  // TODO: Need to be owner to edit 
+  // TODO: Need to be owner to edit
   // TODO: Implement 404
-    .getCourseById(id)
+  courseService
+    .getCourseById(courseId)
     .lean()
-    // course.isEnrolled = course.usersEnrolled.some(x=> x._id === userId);
     .then((course) => {
-      course.isEnrolled = courseService.isEnrolled(course, userId);
       course.isOwner = courseService.isOwner(course, userId);
       return course;
     })
     .then((course) => {
-      res.render('courses/course-edit', { course, isChecked });
+      const isPublic = course.isPublic ? 'checked' : '';
+      res.render('courses/edit', { course, isPublic });
     })
     .catch(next);
 });
+
+router.post('/:courseId([A-Za-z0-9]+)/edit', (req, res, next) => {
+  const { courseId } = req.params;
+  const userId = req.user._id;
+  const courseData = extractCourseData(req);
+
+  // TODO: Need to be owner to edit
+  // TODO: Implement 404
+  courseService
+    .updateOne(courseId, courseData)
+    .then(() => {
+      res.redirect(`/course/${courseId}/details`);
+    })
+    .catch(next);
+});
+
+function extractCourseData(req) {
+  const { title, description, imageUrl, isPublic } = req.body;
+
+  const courseData = {
+    title,
+    description,
+    imageUrl,
+    isPublic: Boolean(isPublic) // Also works -> !!isPublic
+  };
+
+  return courseData;
+}
 
 module.exports = router;

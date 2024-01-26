@@ -1,8 +1,19 @@
 const Course = require('../models/Course');
 const User = require('../models/User');
 
-const getAll = async () => {
-  return await Course.find({}).populate('usersEnrolled').sort({ createdAt: -1 }).lean();
+const getAll = async (searchQuery) => {
+  let search = '.+';
+  if (searchQuery) {
+    if (!/[a-zA-Z0-9 ]+/.test(searchQuery)) {
+      throw { message: 'Invalid search query' };
+    }
+    search = new RegExp('^[a-zA-Z0-9 ]*{}[a-zA-Z0-9 ]*$'.replace('{}', searchQuery), 'i');
+  }
+
+  return await Course.find({ title: { $regex: search } })
+    .populate('usersEnrolled')
+    .sort({ createdAt: -1 })
+    .lean();
 };
 
 function create(courseData, userId) {
@@ -20,7 +31,8 @@ const getCourseById = (id) => {
 };
 
 const getMostPopular = (count) => {
-  return Course.find({}).limit(count).lean(); // TODO: Order by number of enrolled users
+  console.log(count);
+  return Course.find({}).sort({ usersEnrolled: -1 }).limit(count).lean();
 };
 
 const enrollUser = (course, userId) => {
@@ -50,4 +62,8 @@ const deleteCourse = async (courseId) => {
   await Course.deleteOne({ _id: course._id });
 };
 
-module.exports = { create, getAll, getCourseById, getMostPopular, enrollUser, isEnrolled, isOwner, deleteCourse };
+const updateOne = (courseId, courseData) => {
+  return Course.updateOne({ _id: courseId }, courseData);
+};
+
+module.exports = { create, getAll, getCourseById, getMostPopular, enrollUser, isEnrolled, isOwner, deleteCourse, updateOne };
