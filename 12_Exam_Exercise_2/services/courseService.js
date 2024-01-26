@@ -1,7 +1,7 @@
 const Course = require('../models/Course');
 const User = require('../models/User');
 
-const getAll = async (searchQuery) => {
+const getAll = async (searchQuery, userId) => {
   let search = '.+';
   if (searchQuery) {
     if (!/[a-zA-Z0-9 ]+/.test(searchQuery)) {
@@ -12,6 +12,7 @@ const getAll = async (searchQuery) => {
 
   return await Course.find({ title: { $regex: search } })
     .populate('usersEnrolled')
+    .where({ $or: [{ creator: userId }, { isPublic: true }] })
     .sort({ createdAt: -1 })
     .lean();
 };
@@ -32,7 +33,7 @@ const getCourseById = (id) => {
 
 const getMostPopular = (count) => {
   console.log(count);
-  return Course.find({}).sort({ usersEnrolled: -1 }).limit(count).lean();
+  return Course.find({ isPublic: true }).sort({ usersEnrolled: -1 }).limit(count).lean();
 };
 
 const enrollUser = (course, userId) => {
@@ -44,6 +45,19 @@ const enrollUser = (course, userId) => {
     })
     .then((user) => {
       user.enrolledCourses.push(course._id);
+      user.save();
+    });
+};
+
+const unenrollUser = (course, userId) => {
+  course.usersEnrolled.pull(userId);
+  course
+    .save()
+    .then(() => {
+      return getUserById(userId);
+    })
+    .then((user) => {
+      user.enrolledCourses.pull(course._id);
       user.save();
     });
 };
@@ -66,4 +80,4 @@ const updateOne = (courseId, courseData) => {
   return Course.updateOne({ _id: courseId }, courseData);
 };
 
-module.exports = { create, getAll, getCourseById, getMostPopular, enrollUser, isEnrolled, isOwner, deleteCourse, updateOne };
+module.exports = { create, getAll, getCourseById, getMostPopular, enrollUser, isEnrolled, isOwner, deleteCourse, updateOne, unenrollUser };

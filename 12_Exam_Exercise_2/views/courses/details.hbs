@@ -17,6 +17,7 @@
         {{else}}
           {{#if course.isEnrolled}}
             <span class="enrolled-span">You are already enrolled</span>
+            <a class="btn btn-primary" href="/course/{{course._id}}/unenroll">Unenroll</a>
           {{else}}
             <a class="btn btn-primary" href="/course/{{course._id}}/enroll">Enroll</a>
           {{/if}}

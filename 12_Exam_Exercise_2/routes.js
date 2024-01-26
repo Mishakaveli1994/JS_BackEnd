@@ -6,5 +6,8 @@ const courseController = require('./controllers/courseController');
 router.use('/', homeController);
 router.use('/auth', authController);
 router.use('/course', courseController);
+router.get('*', (req, res) => {
+  res.render('404');
+});
 
 module.exports = router;

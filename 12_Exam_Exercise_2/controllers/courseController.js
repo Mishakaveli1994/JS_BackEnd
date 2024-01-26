@@ -1,18 +1,18 @@
 const router = require('express').Router();
 const courseService = require('../services/courseService');
+const { isAuthorized } = require('../middlewares/authMiddleware.js');
 
 // TODO: For create and course access user needs to be authenticated otherwise 404
 // TODO: When displaying messages/ show them on current page and DO NOT REDIRECT / add to locals maybe ?
-// TODO: On forms show error below each field 
+// TODO: On forms show error below each field
 // TODO: Return multiple errors
-// TODO: Create search - with get and querystring
-// TODO: If you have time, implement AJAX 
+// TODO: If you have time, implement AJAX
 
-router.get('/create', (req, res) => {
+router.get('/create', isAuthorized, (req, res) => {
   res.render('courses/create');
 });
 
-router.post('/create', (req, res, next) => {
+router.post('/create', isAuthorized, (req, res, next) => {
   const courseData = extractCourseData(req);
   courseService
     .create(courseData, req.user._id)
@@ -23,7 +23,7 @@ router.post('/create', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:courseId([A-Za-z0-9]+)/details', (req, res, next) => {
+router.get('/:courseId([A-Za-z0-9]+)/details', isAuthorized, (req, res, next) => {
   const { courseId } = req.params;
   const userId = req.user._id;
   courseService
@@ -41,7 +41,7 @@ router.get('/:courseId([A-Za-z0-9]+)/details', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:courseId([A-Za-z0-9]+)/enroll', (req, res, next) => {
+router.get('/:courseId([A-Za-z0-9]+)/enroll', isAuthorized, (req, res, next) => {
   const userId = req.user._id; // get user object from db
   courseService
     .getCourseById(req.params.courseId)
@@ -58,7 +58,24 @@ router.get('/:courseId([A-Za-z0-9]+)/enroll', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:courseId([A-Za-z0-9]+)/delete', (req, res, next) => {
+router.get('/:courseId([A-Za-z0-9]+)/unenroll', isAuthorized, (req, res, next) => {
+  const userId = req.user._id; // get user object from db
+  courseService
+    .getCourseById(req.params.courseId)
+    .then((course) => {
+      if (courseService.isEnrolled(course, userId)) {
+        courseService.unenrollUser(course, userId);
+      } else {
+        throw new Error('The user is not enrolled');
+      }
+    })
+    .then(() => {
+      res.redirect(`/course/${req.params.courseId}/details`);
+    })
+    .catch(next);
+});
+
+router.get('/:courseId([A-Za-z0-9]+)/delete', isAuthorized, (req, res, next) => {
   courseService
     .deleteCourse(req.params.courseId)
     .then(() => {
@@ -67,11 +84,9 @@ router.get('/:courseId([A-Za-z0-9]+)/delete', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:courseId([A-Za-z0-9]+)/edit', (req, res, next) => {
+router.get('/:courseId([A-Za-z0-9]+)/edit', isAuthorized, (req, res, next) => {
   const { courseId } = req.params;
   const userId = req.user._id;
-  // TODO: Need to be owner to edit
-  // TODO: Implement 404
   courseService
     .getCourseById(courseId)
     .lean()
@@ -86,13 +101,10 @@ router.get('/:courseId([A-Za-z0-9]+)/edit', (req, res, next) => {
     .catch(next);
 });
 
-router.post('/:courseId([A-Za-z0-9]+)/edit', (req, res, next) => {
+router.post('/:courseId([A-Za-z0-9]+)/edit', isAuthorized, (req, res, next) => {
   const { courseId } = req.params;
-  const userId = req.user._id;
   const courseData = extractCourseData(req);
 
-  // TODO: Need to be owner to edit
-  // TODO: Implement 404
   courseService
     .updateOne(courseId, courseData)
     .then(() => {

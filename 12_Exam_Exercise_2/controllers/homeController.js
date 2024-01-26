@@ -2,13 +2,11 @@ const router = require('express').Router();
 const courseService = require('../services/courseService');
 
 router.get('/', (req, res, next) => {
-  // TODO: Only display public courses
-  // TODO: Create un-enroll from course
   // TODO: Show enrolled users to creator (number or names ?)
   let getFunc = {};
   const searchQuery = req.query.search;
   if (req.user) {
-    getFunc = courseService.getAll.bind(courseService.getAll, searchQuery);
+    getFunc = courseService.getAll.bind(courseService.getAll, searchQuery, req.user._id);
   } else {
     getFunc = courseService.getMostPopular.bind(courseService.getMostPopular, 3);
   }

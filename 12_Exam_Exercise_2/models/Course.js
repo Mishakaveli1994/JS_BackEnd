@@ -4,15 +4,23 @@ const courseSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    minlength: [5, 'Course title must be at least 5 characters long'],
+    validate: [/^[a-zA-Z0-9_!./\\ ]+$/, 'Course title must contain only letters, numbers and underscores'],
     unique: true
   },
   description: {
     type: String,
     required: true,
-    maxlength: [500, 'Description must be less than 50 characters']
+    minlength: [20, 'Course description must be at least 20 characters long'],
+    validate: [/^[ \w._~()'!*:@,;+?-]*$/, 'Course description must contain only letters, numbers and underscores'],
+    maxlength: [500, 'Course description must be less than 50 characters']
   },
   imageUrl: {
     type: String,
+    validate: [
+      /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+(?:png|jpg|jpeg|gif|svg|webp)+$/,
+      'Image URL needs to start with either http or https protocol'
+    ],
     reqired: true
   },
   isPublic: {

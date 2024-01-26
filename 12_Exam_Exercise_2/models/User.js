@@ -54,5 +54,4 @@ userSchema.pre('save', async function (next) {
 //       console.log(err);
 //     });
 // });
-// TODO: Add custom validation messages
 module.exports = mongoose.model('User', userSchema);
