@@ -12,10 +12,19 @@
         <p>{{course.description}}</p>
 
         {{#if course.isOwner}}
-          <a class="btn btn-danger" href="/course/{{course._id}}/delete">Delete</a>
-          <a class="btn btn-warning" href="/course/{{course._id}}/edit">Edit</a>
+          <div id="owner-options">
+            <a class="btn btn-danger" href="/course/{{course._id}}/delete">Delete</a>
+            <a class="btn btn-warning" href="/course/{{course._id}}/edit">Edit</a>
+          </div>
+          <div id="enrolled-users">
+            {{#if numberOfEnrolled}}
+              <p>Enrolled users: {{numberOfEnrolled}}</p>
+            {{else}}
+              <p>Enrolled users: No one has enrolled to this course yet.</p>
+            {{/if}}
+          </div>
         {{else}}
-          {{#if course.isEnrolled}}
+          {{#if course.numberOfEnrolled}}
             <span class="enrolled-span">You are already enrolled</span>
             <a class="btn btn-primary" href="/course/{{course._id}}/unenroll">Unenroll</a>
           {{else}}

@@ -32,7 +32,6 @@ const getCourseById = (id) => {
 };
 
 const getMostPopular = (count) => {
-  console.log(count);
   return Course.find({ isPublic: true }).sort({ usersEnrolled: -1 }).limit(count).lean();
 };
 

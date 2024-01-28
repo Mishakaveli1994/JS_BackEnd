@@ -2,7 +2,6 @@ const router = require('express').Router();
 const courseService = require('../services/courseService');
 const { isAuthorized } = require('../middlewares/authMiddleware.js');
 
-// TODO: For create and course access user needs to be authenticated otherwise 404
 // TODO: When displaying messages/ show them on current page and DO NOT REDIRECT / add to locals maybe ?
 // TODO: On forms show error below each field
 // TODO: Return multiple errors
@@ -36,7 +35,8 @@ router.get('/:courseId([A-Za-z0-9]+)/details', isAuthorized, (req, res, next) =>
       return course;
     })
     .then((course) => {
-      res.render('courses/details', { course });
+      const numberOfEnrolled = course.usersEnrolled.length;
+      res.render('courses/details', { course, numberOfEnrolled });
     })
     .catch(next);
 });

@@ -45,6 +45,11 @@ const courseSchema = new mongoose.Schema({
   ]
 });
 
+courseSchema.pre('updateOne', function(next) {
+  this.options.runValidators = true;
+  next();
+});
+
 // courseSchema.pre('save', function (next) {
 //   this.createdAt = new Date();
 

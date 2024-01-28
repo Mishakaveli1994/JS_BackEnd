@@ -17,7 +17,6 @@ const login = async (username, password) => {
   if (!user) return Promise.reject({ message: 'Invalid username or password!', statusCode: 404 });
 
   const areEqual = await bcrypt.compare(password, user.password);
-  console.log(areEqual);
   if (!areEqual) return Promise.reject({ message: 'Invalid username or password!', statusCode: 404 });
 
   const token = jwt.sign({ _id: user._id, username: user.username }, SECRET, { expiresIn: '2h' });
